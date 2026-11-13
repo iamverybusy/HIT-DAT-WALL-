@@ -1,0 +1,309 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidUpgrades(u) {
+      return u is map
+        && u.keys().hasAll(['power', 'speed', 'crit', 'wealth', 'splash', 'combo'])
+        && u.keys().hasOnly(['power', 'speed', 'crit', 'wealth', 'splash', 'combo'])
+        && u.power is int && u.power >= 0 && u.power <= 25
+        && u.speed is int && u.speed >= 0 && u.speed <= 25
+        && u.crit is int && u.crit >= 0 && u.crit <= 25
+        && u.wealth is int && u.wealth >= 0 && u.wealth <= 25
+        && u.splash is int && u.splash >= 0 && u.splash <= 25
+        && u.combo is int && u.combo >= 0 && u.combo <= 25;
+    }
+
+    function isValidPrestigeUpgrades(p) {
+      return p is map
+        && p.keys().hasAll([
+          'titan',
+          'midas',
+          'idle',
+          'overdrive',
+          'shockwave',
+          'weakspot',
+          'bagmaster',
+          'starter',
+          'chaincrit',
+          'combomaster'
+        ])
+        && p.keys().hasOnly([
+          'titan',
+          'midas',
+          'idle',
+          'overdrive',
+          'shockwave',
+          'weakspot',
+          'bagmaster',
+          'starter',
+          'chaincrit',
+          'combomaster'
+        ])
+        && p.titan is int && p.titan >= 0 && p.titan <= 20
+        && p.midas is int && p.midas >= 0 && p.midas <= 20
+        && p.idle is int && p.idle >= 0 && p.idle <= 20
+        && p.overdrive is int && p.overdrive >= 0 && p.overdrive <= 20
+        && p.shockwave is int && p.shockwave >= 0 && p.shockwave <= 20
+        && p.weakspot is int && p.weakspot >= 0 && p.weakspot <= 20
+        && p.bagmaster is int && p.bagmaster >= 0 && p.bagmaster <= 20
+        && p.starter is int && p.starter >= 0 && p.starter <= 20
+        && p.chaincrit is int && p.chaincrit >= 0 && p.chaincrit <= 20
+        && p.combomaster is int && p.combomaster >= 0 && p.combomaster <= 20;
+    }
+
+    function isValidAchievementsList(list) {
+      return list is list
+        && list.size() <= 80
+        && (list.size() == 0 || (list[0] is string && list[0].size() >= 1 && list[0].size() <= 40));
+    }
+
+    function isValidPremiumList(list) {
+      return list is list
+        && list.size() <= 30
+        && (list.size() == 0 || (list[0] is string && list[0].size() >= 1 && list[0].size() <= 40));
+    }
+
+    function isValidPlayer(data, userId) {
+      return data.keys().hasAll([
+          'uid',
+          'displayName',
+          'coins',
+          'strength',
+          'wallsBroken',
+          'highestStage',
+          'highestBossStageCleared',
+          'rebirths',
+          'goldenKnuckles',
+          'totalPunches',
+          'weakSpotsHit',
+          'bossesDefeated',
+          'bestCombo',
+          'overdrivesUsed',
+          'upgrades',
+          'prestigeUpgrades',
+          'unlockedGloves',
+          'equippedGlove',
+          'equippedGloveColor',
+          'skinTone',
+          'unlockedBags',
+          'equippedBag',
+          'equippedBagColor',
+          'claimedAchievements',
+          'ownedPremiumItems',
+          'lastActiveAt',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'displayName',
+          'coins',
+          'strength',
+          'wallsBroken',
+          'highestStage',
+          'highestBossStageCleared',
+          'rebirths',
+          'goldenKnuckles',
+          'totalPunches',
+          'weakSpotsHit',
+          'bossesDefeated',
+          'bestCombo',
+          'overdrivesUsed',
+          'upgrades',
+          'prestigeUpgrades',
+          'unlockedGloves',
+          'equippedGlove',
+          'equippedGloveColor',
+          'skinTone',
+          'unlockedBags',
+          'equippedBag',
+          'equippedBagColor',
+          'claimedAchievements',
+          'ownedPremiumItems',
+          'lastActiveAt',
+          'updatedAt'
+        ])
+        && isValidId(data.uid)
+        && data.uid == userId
+        && data.displayName is string
+        && data.displayName.size() >= 1
+        && data.displayName.size() <= 40
+        && data.coins is number && data.coins >= 0 && data.coins <= 999999999999999
+        && data.strength is number && data.strength >= 1 && data.strength <= 999999999999999
+        && data.wallsBroken is int && data.wallsBroken >= 0 && data.wallsBroken <= 10000000
+        && data.highestStage is int && data.highestStage >= 1 && data.highestStage <= 10000000
+        && data.highestBossStageCleared is int && data.highestBossStageCleared >= 0 && data.highestBossStageCleared <= 10000000
+        && data.rebirths is int && data.rebirths >= 0 && data.rebirths <= 1000000
+        && data.goldenKnuckles is int && data.goldenKnuckles >= 0 && data.goldenKnuckles <= 100000000
+        && data.totalPunches is int && data.totalPunches >= 0 && data.totalPunches <= 100000000
+        && data.weakSpotsHit is int && data.weakSpotsHit >= 0 && data.weakSpotsHit <= 10000000
+        && data.bossesDefeated is int && data.bossesDefeated >= 0 && data.bossesDefeated <= 10000000
+        && data.bestCombo is int && data.bestCombo >= 0 && data.bestCombo <= 1000000
+        && data.overdrivesUsed is int && data.overdrivesUsed >= 0 && data.overdrivesUsed <= 10000000
+        && isValidUpgrades(data.upgrades)
+        && isValidPrestigeUpgrades(data.prestigeUpgrades)
+        && data.unlockedGloves is list
+        && data.unlockedGloves.size() >= 1
+        && data.unlockedGloves.size() <= 30
+        && data.unlockedGloves[0] is string
+        && data.unlockedGloves[0].size() >= 1
+        && data.unlockedGloves[0].size() <= 40
+        && data.equippedGlove is string
+        && data.equippedGlove.size() >= 1
+        && data.equippedGlove.size() <= 40
+        && data.equippedGloveColor is string
+        && data.equippedGloveColor.size() >= 1
+        && data.equippedGloveColor.size() <= 24
+        && data.skinTone is string
+        && data.skinTone.size() >= 1
+        && data.skinTone.size() <= 24
+        && data.unlockedBags is list
+        && data.unlockedBags.size() >= 1
+        && data.unlockedBags.size() <= 25
+        && data.unlockedBags[0] is string
+        && data.unlockedBags[0].size() >= 1
+        && data.unlockedBags[0].size() <= 40
+        && data.equippedBag is string
+        && data.equippedBag.size() >= 1
+        && data.equippedBag.size() <= 40
+        && data.equippedBagColor is string
+        && data.equippedBagColor.size() >= 1
+        && data.equippedBagColor.size() <= 24
+        && isValidAchievementsList(data.claimedAchievements)
+        && isValidPremiumList(data.ownedPremiumItems)
+        && data.lastActiveAt is int && data.lastActiveAt >= 0 && data.lastActiveAt <= 99999999999999
+        && data.updatedAt == request.time;
+    }
+
+    function isValidLeaderboardEntry(data, entryId) {
+      return data.keys().hasAll([
+          'uid',
+          'displayName',
+          'highestStage',
+          'wallsBroken',
+          'punchPower',
+          'rebirths',
+          'gloveId',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid',
+          'displayName',
+          'highestStage',
+          'wallsBroken',
+          'punchPower',
+          'rebirths',
+          'gloveId',
+          'updatedAt'
+        ])
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && entryId == request.auth.uid
+        && data.displayName is string
+        && data.displayName.size() >= 1
+        && data.displayName.size() <= 40
+        && data.highestStage is int && data.highestStage >= 1 && data.highestStage <= 10000000
+        && data.wallsBroken is int && data.wallsBroken >= 0 && data.wallsBroken <= 10000000
+        && data.punchPower is number && data.punchPower >= 1 && data.punchPower <= 999999999999999
+        && data.rebirths is int && data.rebirths >= 0 && data.rebirths <= 1000000
+        && data.gloveId is string && data.gloveId.size() >= 1 && data.gloveId.size() <= 40
+        && data.updatedAt == request.time;
+    }
+
+    match /players/{userId} {
+      allow get: if isValidId(userId) && isOwner(userId);
+      allow list: if false;
+      allow create: if isVerifiedUser()
+        && isValidId(userId)
+        && isOwner(userId)
+        && isValidPlayer(incoming(), userId);
+      allow update: if isVerifiedUser()
+        && isValidId(userId)
+        && isOwner(userId)
+        && isValidPlayer(incoming(), userId)
+        && incoming().uid == existing().uid
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName',
+          'coins',
+          'strength',
+          'wallsBroken',
+          'highestStage',
+          'highestBossStageCleared',
+          'rebirths',
+          'goldenKnuckles',
+          'totalPunches',
+          'weakSpotsHit',
+          'bossesDefeated',
+          'bestCombo',
+          'overdrivesUsed',
+          'upgrades',
+          'prestigeUpgrades',
+          'unlockedGloves',
+          'equippedGlove',
+          'equippedGloveColor',
+          'skinTone',
+          'unlockedBags',
+          'equippedBag',
+          'equippedBagColor',
+          'claimedAchievements',
+          'ownedPremiumItems',
+          'lastActiveAt',
+          'updatedAt'
+        ]);
+      allow delete: if isVerifiedUser() && isValidId(userId) && isOwner(userId);
+    }
+
+    match /leaderboard/{entryId} {
+      allow get: if isValidId(entryId);
+      allow list: if true;
+      allow create: if isVerifiedUser()
+        && isValidId(entryId)
+        && isValidLeaderboardEntry(incoming(), entryId);
+      allow update: if isVerifiedUser()
+        && isValidId(entryId)
+        && existing().uid == request.auth.uid
+        && isValidLeaderboardEntry(incoming(), entryId)
+        && incoming().uid == existing().uid
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName',
+          'highestStage',
+          'wallsBroken',
+          'punchPower',
+          'rebirths',
+          'gloveId',
+          'updatedAt'
+        ]);
+      allow delete: if isVerifiedUser()
+        && isValidId(entryId)
+        && existing().uid == request.auth.uid;
+    }
+  }
+}

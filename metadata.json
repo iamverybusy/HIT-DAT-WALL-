@@ -1,0 +1,8 @@
+{
+  "name": "HIT DAT WALL! ",
+  "description": "HIT DAT WALL!\n\nA quick thought Game. \n\nPublished by. LiveBetterGameS\n\nBased off \"Punch The Walls, By BoomGames. Edited by LiveaBetterLife with <3\n",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

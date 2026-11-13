@@ -1,0 +1,113 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-display: 'Lilita One', 'Fredoka', system-ui, sans-serif;
+    --font-sans: 'Fredoka', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    background-color: #0E0F12;
+    color: #F4F4F5;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+.cartoony-outline {
+  text-shadow:
+    0 3px 0 rgba(0, 0, 0, 0.92),
+    0 6px 14px rgba(0, 0, 0, 0.65);
+}
+
+.font-mono-tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes floatDamage {
+  0% {
+    opacity: 0;
+    transform: translate3d(-50%, 6px, 0) scale(0.82);
+  }
+  16% {
+    opacity: 1;
+    transform: translate3d(-50%, -14px, 0) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-50%, -74px, 0) scale(0.94);
+  }
+}
+
+.animate-float-damage {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  animation: floatDamage 0.68s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes comicPop {
+  0% {
+    opacity: 0;
+    transform: translate3d(-50%, 10px, 0) rotate(var(--tilt, -6deg)) scale(0.42);
+  }
+  20% {
+    opacity: 1;
+    transform: translate3d(-50%, -12px, 0) rotate(var(--tilt, -6deg)) scale(1.24);
+  }
+  42% {
+    opacity: 1;
+    transform: translate3d(-50%, -22px, 0) rotate(var(--tilt, -6deg)) scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-50%, -70px, 0) rotate(var(--tilt, -6deg)) scale(0.9);
+  }
+}
+
+.animate-comic-pop {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  animation: comicPop 0.78s cubic-bezier(0.18, 0.9, 0.3, 1.15) forwards;
+}
+
+@keyframes bannerPop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -16px, 0) scale(0.9);
+  }
+  16% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1.03);
+  }
+  28% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.animate-banner-pop {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  animation: bannerPop 0.34s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+

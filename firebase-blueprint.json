@@ -1,0 +1,229 @@
+{
+  "entities": {
+    "WallBreakerProfile": {
+      "title": "WallBreakerProfile",
+      "description": "Persistent player strength, coins, Golden Knuckles prestige currency, customizable gloves and heavy bags, upgrades, achievements, and offline tracking.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the player."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Player display name."
+        },
+        "coins": {
+          "type": "number",
+          "description": "Unspent coins earned from punching and breaking walls."
+        },
+        "strength": {
+          "type": "number",
+          "description": "Base punch strength trained via heavy bag and wall shatters."
+        },
+        "wallsBroken": {
+          "type": "integer",
+          "description": "Total number of walls shattered."
+        },
+        "highestStage": {
+          "type": "integer",
+          "description": "Highest wall stage reached."
+        },
+        "highestBossStageCleared": {
+          "type": "integer",
+          "description": "Highest Boss Vault stage that already awarded a Golden Knuckle drop in the current run."
+        },
+        "rebirths": {
+          "type": "integer",
+          "description": "Number of rebirth ascensions completed."
+        },
+        "goldenKnuckles": {
+          "type": "integer",
+          "description": "Permanent prestige currency earned upon Rebirthing."
+        },
+        "totalPunches": {
+          "type": "integer",
+          "description": "Lifetime punches thrown."
+        },
+        "weakSpotsHit": {
+          "type": "integer",
+          "description": "Total active glowing weak spots struck."
+        },
+        "bossesDefeated": {
+          "type": "integer",
+          "description": "Total timed Boss Vault walls shattered before timeout."
+        },
+        "bestCombo": {
+          "type": "integer",
+          "description": "Highest punch combo chain achieved."
+        },
+        "overdrivesUsed": {
+          "type": "integer",
+          "description": "Total Overdrive burst activations."
+        },
+        "upgrades": {
+          "type": "object",
+          "description": "Coin upgrade levels (0-25) for power, speed, crit, wealth, splash, and combo."
+        },
+        "prestigeUpgrades": {
+          "type": "object",
+          "description": "Permanent Golden Knuckle prestige upgrade levels (0-20) for titan, midas, idle, overdrive, shockwave, weakspot, bagmaster, starter, chaincrit, and combomaster."
+        },
+        "unlockedGloves": {
+          "type": "array",
+          "description": "List of unlocked glove IDs."
+        },
+        "equippedGlove": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Currently equipped glove ID."
+        },
+        "equippedGloveColor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24,
+          "description": "Custom glove paint/trim preset ID."
+        },
+        "skinTone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24,
+          "description": "Custom forearm skin or sleeve tone preset ID."
+        },
+        "unlockedBags": {
+          "type": "array",
+          "description": "List of unlocked heavy bag IDs."
+        },
+        "equippedBag": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Currently equipped heavy bag ID."
+        },
+        "equippedBagColor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24,
+          "description": "Custom heavy bag wrap accent preset ID."
+        },
+        "claimedAchievements": {
+          "type": "array",
+          "description": "List of claimed achievement IDs granting permanent bonuses."
+        },
+        "ownedPremiumItems": {
+          "type": "array",
+          "description": "List of IRL/premium store entitlement IDs retained permanently across character resets."
+        },
+        "lastActiveAt": {
+          "type": "integer",
+          "description": "Client epoch ms of last active play for offline rewards calculation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last profile sync."
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "coins",
+        "strength",
+        "wallsBroken",
+        "highestStage",
+        "highestBossStageCleared",
+        "rebirths",
+        "goldenKnuckles",
+        "totalPunches",
+        "weakSpotsHit",
+        "bossesDefeated",
+        "bestCombo",
+        "overdrivesUsed",
+        "upgrades",
+        "prestigeUpgrades",
+        "unlockedGloves",
+        "equippedGlove",
+        "equippedGloveColor",
+        "skinTone",
+        "unlockedBags",
+        "equippedBag",
+        "equippedBagColor",
+        "claimedAchievements",
+        "ownedPremiumItems",
+        "lastActiveAt",
+        "updatedAt"
+      ]
+    },
+    "LeaderboardEntry": {
+      "title": "LeaderboardEntry",
+      "description": "Publicly readable personal-best record on the global wall-breaker leaderboard.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Owner Firebase Auth UID."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Public player display name."
+        },
+        "highestStage": {
+          "type": "integer",
+          "description": "Highest wall stage broken or reached."
+        },
+        "wallsBroken": {
+          "type": "integer",
+          "description": "Total walls shattered."
+        },
+        "punchPower": {
+          "type": "number",
+          "description": "Effective damage per punch."
+        },
+        "rebirths": {
+          "type": "integer",
+          "description": "Rebirth tier count."
+        },
+        "gloveId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Equipped glove ID."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when record was updated."
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "highestStage",
+        "wallsBroken",
+        "punchPower",
+        "rebirths",
+        "gloveId",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/players/{userId}": {
+      "schema": { "$ref": "#/entities/WallBreakerProfile" },
+      "description": "Owner-only progression profile for Punch the Wall."
+    },
+    "/leaderboard/{entryId}": {
+      "schema": { "$ref": "#/entities/LeaderboardEntry" },
+      "description": "Public global rankings keyed by player UID."
+    }
+  }
+}
